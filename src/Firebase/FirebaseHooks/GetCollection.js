@@ -1,7 +1,7 @@
 import { projectFirestore } from "../../Firebase/FirebaseUtils";
 
-const getNsCollection = async (collection, query = null, orderBy = null) => {
-  let documents = null;
+const getCollection = async (collection, query = null, orderBy = null) => {
+  let documents = [];
   let error = null;
 
   let collectionRef = projectFirestore.collection(collection);
@@ -21,10 +21,11 @@ const getNsCollection = async (collection, query = null, orderBy = null) => {
     });
     //    console.log(documents);
   } catch (err) {
+    console.log("error occured")
     // console.log(err.message);
   }
 
   return { error, documents };
 };
 
-export default getNsCollection;
+export default getCollection;

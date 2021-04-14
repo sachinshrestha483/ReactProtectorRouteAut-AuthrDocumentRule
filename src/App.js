@@ -7,24 +7,7 @@ import { SetUser } from "./Store/Auth/UserReducer";
 import User from "./Models/User";
 
 function App() {
-  const user = getUser();
-  console.log(user);
   
-  const updateUser=async()=>{
-    const userObject = new User();
-    console.log("------------User Id--------------")
-    console.log(user.uid)
-
-    let obj = await userObject.GetUser(user.user.uid);
-    console.log("----loaded object----")
-    console.log(obj)
-     console.log("Setting the user")
-    store.dispatch(SetUser({ user: obj }));
-    console.log("user in State");
-    console.log(store.getState());
-  }
-  updateUser();
-
 
   return (
     <div className="App">

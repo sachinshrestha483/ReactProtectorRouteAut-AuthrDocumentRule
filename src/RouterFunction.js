@@ -7,6 +7,12 @@ import PublicPage from "./Pages/PublicPage";
 import PrivatePage from "./Pages/PrivatePage";
 import PrivateRoute from "./PrivateRoute"
 import GetUser from "./Firebase/FirebaseHooks/GetCurrentUser"
+import LabSettings from "./Pages/LabSettings";
+import GroupPage from "./Pages/DomainPages/GroupPage";
+import SubtestPage from "./Pages/DomainPages/SubTestPage";
+import ViewAndEditSubtestPage from "./Pages/DomainPages/ViewAndEditSubtestPage";
+
+
 const RouterFunction = () => {
   const {user}= GetUser();
 
@@ -42,6 +48,24 @@ else{
 
             <Route exact path="/Login">
               <LoginPage />
+            </Route>
+
+
+            <Route exact path="/LabSettings">
+              <LabSettings />
+            </Route>
+
+            <Route exact path="/GroupPage">
+              <GroupPage />
+            </Route>
+
+            
+            <Route exact path="/SubtestPage">
+              <SubtestPage />
+            </Route>
+
+            <Route exact path="/SubtestListPage">
+              <ViewAndEditSubtestPage />
             </Route>
 
             <PrivateRoute path="/PrivatePage" component={PrivatePage} redirect="/" validateFunction={isLoggedin()}  />
