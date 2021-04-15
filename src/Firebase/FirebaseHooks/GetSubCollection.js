@@ -1,39 +1,42 @@
 import { projectFirestore } from "./../FirebaseUtils";
 
-// Used Group Query Here.... 
+// Used Group Query Here....
 
-const getSubCollection = async (finalCollection,query = null, orderBy=null) => {
-  let  documents =[];
+const getSubCollection = async (
+  finalCollection,
+  query = null,
+  orderBy = null
+) => {
+  let documents = [];
   let error = null;
 
   let collectionRef = projectFirestore.collectionGroup(finalCollection);
 
-  if (query!=null) {
+  if (query != null) {
     collectionRef = collectionRef.where(...query);
   }
-  
-  if(orderBy!=null){
-      collectionRef=collectionRef.orderBy(...orderBy)
+
+  if (orderBy != null) {
+    collectionRef = collectionRef.orderBy(...orderBy);
   }
 
- 
-console.log("------------Calling The SubCollection------------------");
+  let res = await collectionRef.get();
 
-let res= await collectionRef.get();
+  try {
+    documents = await res.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    console.log(documents);
+  } catch (err) {
 
-try{
-    
-    documents=await res.docs.map((doc)=>{
-        return{...doc.data(),id:doc.id}
-    }) 
-    
-}
-catch(err){
-     console.log(err.message);
-error=err.message;
-}
+console.log("-------@@@Error@@@----")
+    console.log(err.message);
+    console.log(err.message);
 
 
+
+    error = err.message;
+  }
 
   return { error, documents };
 };

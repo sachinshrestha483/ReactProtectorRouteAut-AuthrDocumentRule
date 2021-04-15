@@ -15,16 +15,19 @@ const ViewAndEditTestPage = () => {
   const [outLabList, setOutLabList] = useState([]);
 
   useEffect(() => {
-    console.log("--------------SubCollection List-------------- ");
     //  loadGroupTest();
-    loadAllSubtests();
+    //loadAllSubtests();
     // loadAllOutsideTest();
     loadAllTest();
   }, []);
 
   const loadAllTest = async () => {
     const { GetAllTestList } = TestFunctions();
+
     let list = await GetAllTestList();
+    console.log("-----------------------list---", list);
+    console.log(list);
+
     setTestList(list);
   };
 
@@ -42,25 +45,11 @@ const ViewAndEditTestPage = () => {
   const filterTestList = (id) => {
     let filteredListl = [];
     if (id != null) {
-      
-      console.log("---------------------Test List-------------------")
-      console.log("---------------------Test List-------------------")
-      console.log(testList)
-      console.log("---------------------Test List-------------------")
-      console.log("---------------------Test List-------------------")
-       
-      
-      filteredListl = testList.filter((item) => item.subtestId == id);
-      
+      console.log(testList);
 
-      console.log("------Filtered Test List--------")
-      console.log("------Filtered Test List--------")
-      console.log("------Filtered Test List--------")
-      console.log("------Filtered Test List--------")
+      filteredListl = testList.filter((item) => item.subtestId == id);
+
       console.log(filteredListl);
-      console.log("------Filtered Test List--------")
-      console.log("------Filtered Test List--------")
-      console.log("------Filtered Test List--------")
 
       setFilteredSubtestList(filteredListl);
     }
@@ -69,7 +58,7 @@ const ViewAndEditTestPage = () => {
   return (
     <div>
       <div className="pageMargin1">
-        <h1 className="primaryHeading text-center mb-4"> Subtest List </h1>
+        <h1 className="primaryHeading text-center mb-4"> Test List </h1>
         <h2 className="text-center">{selectedGroupTestId}</h2>
         <select
           className="inputBox  py-0"
@@ -85,9 +74,6 @@ const ViewAndEditTestPage = () => {
             return <option value={item.id}>{item.name}</option>;
           })}
         </select>
-
-
-
 
         {/* <SubtestList
           filteredSubtestList={filteredSubtestList}

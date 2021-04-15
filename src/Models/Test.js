@@ -1,50 +1,55 @@
 import GetDocument from "../Firebase/FirebaseHooks/GetDocument";
 import useCollection from "../Firebase/FirebaseHooks/UseCollection";
 import UseDocument from "../Firebase/FirebaseHooks/UseDocument";
-
 import getCollection from "../Firebase/FirebaseHooks/GetCollection";
 import { timestamp } from "./../Firebase/FirebaseUtils";
 import useSubCollectionByPath from "../Firebase/FirebaseHooks/UseSubCollectionByPath";
-
-import GetSubCollection from "../Firebase/FirebaseHooks/GetSubCollection"
+import GetSubCollection from "../Firebase/FirebaseHooks/GetSubCollection";
 
 const collectionName = "Test";
 const subParentCollectionName = "SubTests";
 const parentCollectionName = "TestGroup";
 
-
 const TestFunctions = () => {
- 
-  const AddTest=async(groupTestId,subtestId,obj)=>{
-    const collectionPath=parentCollectionName+"/"+groupTestId+"/"+subParentCollectionName+"/"+subtestId+"/"+collectionName;
+  const AddTest = async (groupTestId, subtestId, obj) => {
+    const collectionPath =
+      parentCollectionName +
+      "/" +
+      groupTestId +
+      "/" +
+      subParentCollectionName +
+      "/" +
+      subtestId +
+      "/" +
+      collectionName;
     const { addDoc } = useSubCollectionByPath(collectionPath);
     obj.dateIndex = timestamp();
     await addDoc(Object.assign({}, obj));
-  }
+  };
 
-    const GetAllTestList=  async()=> {
-     let list = await GetSubCollection(collectionName, null, null);
-     console.log("-----list------");
-     console.log("-----list------");
-     
-     console.log("-----list------");
-       console.log(list.documents);
-     console.log("-----list------");
-     console.log("-----list------");
-     console.log("-----list------");
+  const GetAllTestList = async () => {
+    console.log("----------------------------get all Test -------------------")
+   
+   
+    let list = await GetSubCollection(collectionName, null, null);
+    console.log("-----list------");
+    console.log("-----list------");
+    console.log("-----list------");
+    console.log(list.documents);
+    console.log("-----list------");
+    console.log("-----list------");
+    console.log("-----list------");
 
-     
-     return list;
-   } 
- 
+    return list;
+  };
+
   return {
     AddTest,
-    GetAllTestList
+    GetAllTestList,
   };
-}
- 
-export  {TestFunctions};
+};
 
+export { TestFunctions };
 
 class Test {
   constructor() {
@@ -66,9 +71,8 @@ class Test {
     this.groupId = "";
     this.subtestId = "";
     this.dateIndex = "";
-    this.show=true;
-    this.suggestedValues=[];
-    
+    this.show = true;
+    this.suggestedValues = [];
   }
 
   // async AddTest() {
