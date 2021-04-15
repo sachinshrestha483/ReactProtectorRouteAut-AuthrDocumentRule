@@ -1,6 +1,8 @@
 import { useState } from "react";
 import TestGroup from "../../../Models/TestGroup";
 import { TestGroupFunctions } from "../../../Models/TestGroup";
+import { useAlert } from "react-alert";
+
 const IndividualGroupTest = (props) => {
   const [showEditPage, setShowEditPage] = useState(false);
 
@@ -9,6 +11,9 @@ const IndividualGroupTest = (props) => {
   const [name, setName] = useState(props.item.name);
   const [notes, setNotes] = useState(props.item.notes);
   const [showOrHide, setShowOrHide] = useState(props.item.show);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
+  const alert = useAlert();
 
   const handleUpdate = async () => {
     const { UpdateTest, GetTestGroupById } = TestGroupFunctions();
@@ -17,8 +22,15 @@ const IndividualGroupTest = (props) => {
     updateObj.notes = notes;
     updateObj.show = showOrHide;
     updateObj.dateIndex = props.item.dateIndex;
-    await UpdateTest(props.item.id, updateObj);
+    setIsSubmittingForm(true);
+    let res = await UpdateTest(props.item.id, updateObj);
+    setIsSubmittingForm(false);
 
+    if (res.error != null) {
+      alert.error(res.error);
+    } else {
+      alert.success("Updated ");
+    }
     let updatedObject = await GetTestGroupById(props.item.id);
 
     console.log("-----Updated Object----");
@@ -27,7 +39,7 @@ const IndividualGroupTest = (props) => {
     if (updatedObject != null) {
       console.log("-----Not Nulll----");
 
-      setDisplayName(updatedObject.name)
+      setDisplayName(updatedObject.name);
       setName(updatedObject.name);
       setNotes(updatedObject.notes);
       setShowOrHide(updatedObject.show);
@@ -99,9 +111,19 @@ const IndividualGroupTest = (props) => {
               </div>
 
               <div class="flex flex-row">
-                <button type="submit" class="primaryButton text-center">
-                  Update
-                </button>
+
+{isSubmittingForm?
+  <button type="submit" class="primaryDisabledButton text-center">
+                  Updating 
+                </button>:
+ <button type="submit" class="primaryButton text-center">
+ Update
+</button>
+
+}
+               
+
+
               </div>
             </form>
           </div>

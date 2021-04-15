@@ -23,10 +23,9 @@ const AddSubtestComponent = () => {
   const [outsideLabId, setOutsidelabId] = useState(null);
   const [OutsideLabList, setOutsideLabList] = useState([]);
   const [showSelectOutsidelab, setShowSelectOutsideLab] = useState(false);
-
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
   const alert = useAlert();
-
 
   const loadOutLabList = async () => {
     const { GetOutLabList } = OutlabFunctions();
@@ -63,10 +62,35 @@ const AddSubtestComponent = () => {
     console.log("----Summary-----");
     console.log(summary);
 
-    await AddSubTest(groupTestId, subtestObject);
-console.log("------Calling The Alert-----")
+    setIsSubmittingForm(true);
+    let res = await AddSubTest(groupTestId, subtestObject);
+    setIsSubmittingForm(false);
 
-    alert.show("Test Added!");
+    console.log("------Calling The Alert-----");
+    console.log("------Calling The Res-----");
+
+    console.log(res);
+    console.log("------Calling The Alert-----");
+
+    if (res.error == null) {
+      alert.success("Test Added!");
+       setName("");
+       setNameBelowTest("");
+       setNote("")
+       setOutsidelabId("");
+       setShowSelectOutsideLab(false);
+       setSummary("");
+       setMrp(0);
+       setCost(0);
+       setIsOutsideTest(false);
+
+    } else {
+      alert.error("Error Occured " + res.error);
+    }
+
+
+
+
   };
 
   const loadTestGroupsList = async () => {
@@ -102,7 +126,7 @@ console.log("------Calling The Alert-----")
               value={groupTestId}
               onChange={(e) => setGroupTestId(e.target.value)}
             >
-              <option>Select The Group Test</option>
+              <option  value="">Select The Group Test</option>
               {groupTestList.map((item) => {
                 return <option value={item.id}>{item.name}</option>;
               })}
@@ -245,10 +269,13 @@ console.log("------Calling The Alert-----")
             onChange={handleEditorChange}
           />
         </div>
-
+{isSubmittingForm?<button type="submit" disabled className="primaryDisabledButton mt-4 col-span-1">
+          Adding It
+        </button>:
         <button type="submit" className="primaryButton mt-4 col-span-1">
-          Add It
-        </button>
+        Add It
+      </button>}
+        
       </form>
     </div>
   );

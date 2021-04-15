@@ -1,10 +1,15 @@
 import { useState } from "react";
 import TestGroup from "../../../Models/TestGroup";
 import { TestGroupFunctions } from "../../../Models/TestGroup";
+import { useAlert } from "react-alert";
+
 const AddGroupTestComponent = (props) => {
   const [groupName, setGroupName] = useState("");
   const [notes, setNotes] = useState("");
   const [showorHide, setShoworHide] = useState(true);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
+  const alert = useAlert();
 
   const handleSubmit = async () => {
     const { AddGroupTest } = TestGroupFunctions();
@@ -17,7 +22,16 @@ const AddGroupTestComponent = (props) => {
 
     console.log(object);
 
-    await AddGroupTest(object);
+    setIsSubmittingForm(true);
+    let res = await AddGroupTest(object);
+    setIsSubmittingForm(false);
+
+    if (res.error != null) {
+      alert.error(res.error);
+    } else {
+      alert.success("Added ");
+    }
+    setGroupName("");
     props.loadDatafun();
   };
 
@@ -25,38 +39,51 @@ const AddGroupTestComponent = (props) => {
     <div>
       <div className="lg:fixed lg:w-60	">
         <div className="secondaryText">Add Group</div>
-
-        <input
-          className="inputBox "
-          placeholder="Group Name"
-          value={groupName}
-          onChange={(e) => {
-            setGroupName(e.target.value);
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
           }}
-        />
-        <input
-          className="inputBox "
-          value={notes}
-          placeholder="Note"
-          onChange={(e) => {
-            setNotes(e.target.value);
-          }}
-        />
-        <div class="flex flex-row items-center">
+        >
           <input
-            checked={showorHide}
+            className="inputBox "
+            placeholder="Group Name"
+            value={groupName}
+            required
             onChange={(e) => {
-              setShoworHide(e.target.checked);
+              setGroupName(e.target.value);
             }}
-            type="checkbox"
-            class="mb-2"
           />
-          <label class="ml-2  py-0 normalText">Show/Hide</label>
-        </div>
+          <input
+            className="inputBox "
+            value={notes}
+            placeholder="Note"
+            onChange={(e) => {
+              setNotes(e.target.value);
+            }}
+          />
+          <div class="flex flex-row items-center">
+            <input
+              checked={showorHide}
+              onChange={(e) => {
+                setShoworHide(e.target.checked);
+              }}
+              type="checkbox"
+              class="mb-2"
+            />
+            <label class="ml-2  py-0 normalText">Show/Hide</label>
+          </div>
 
-        <button type="submit" onClick={handleSubmit} className="primaryButton">
-          Add It
-        </button>
+          {isSubmittingForm ? (
+            <button type="submit" disabled className="primaryDisabledButton">
+              Adding it
+            </button>
+          ) : (
+            <button type="submit" className="primaryButton">
+              Add It
+            </button>
+          )}
+        </form>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ const getSubCollection = async (finalCollection,query = null, orderBy=null) => {
   }
 
  
+console.log("------------Calling The SubCollection------------------");
 
 let res= await collectionRef.get();
 

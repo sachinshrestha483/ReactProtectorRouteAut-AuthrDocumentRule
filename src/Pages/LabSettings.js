@@ -16,11 +16,12 @@ to="/GroupPage"
         >
           Lab  SubTest Settings
         </Link>
-        <a
+        <Link
+        to="/TestPage"
           className="pageListItem"
         >
           Lab Test Settings
-        </a>
+        </Link>
         <a
           className="pageListItem"
         >

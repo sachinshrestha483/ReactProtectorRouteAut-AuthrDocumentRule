@@ -1,13 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditSubtestComponent from "./EditSubtestComponent";
+import { SubtestFunctions } from "../../../Models/Subtest";
 
 const IndividualSubTest = (props) => {
+  const [showEditSection, setShowEditSection] = useState(false);
 
+  const [name, setName] = useState("");
+  const [isIndividualTest, SetIsIndividualTest] = useState(false);
+  const [isOutsideTest, setIsOutsideTest] = useState(false);
+  const [cost, setCost] = useState(0);
+  const [mrp, setMrp] = useState(0);
+  const [outsidelabId, setOutsidelabId] = useState(false);
+  const [nameBelowTest, setNameBelowTest] = useState("");
+  const [summary, setSummary] = useState("");
 
+  const [showTinyMceTextBox, setshowTinyMceTextBox] = useState(true);
 
-const [showEditSection,setShowEditSection] =useState(false);
-    const createMarkup = (content) => {
-    return { __html: content };
+  const loadData = () => {
+    setName(props.subtest.name);
+    setNameBelowTest(props.subtest.nameBelowTest);
+    setOutsidelabId(props.subtest.outsidelabId);
+    setSummary(props.subtest.summary);
+    SetIsIndividualTest(props.subtest.isIndividualTest);
+    setIsOutsideTest(props.subtest.isOutsideTest);
+    setCost(props.subtest.cost);
+    setMrp(props.subtest.mrp);
+  };
+
+  const reloadData = async () => {
+    const { GetSubtestById } = SubtestFunctions();
+    setshowTinyMceTextBox(false);
+
+    let updatedDoc = await GetSubtestById(
+      props.subtest.groupTestId,
+      props.subtest.id
+    );
+    console.log("-----Updated Doc-----");
+    console.log("-----Updated Doc-----");
+
+    console.log("-----Updated Doc-----");
+    console.log(updatedDoc);
+    console.log("-----Updated Doc-----");
+    console.log("-----Updated Doc-----");
+    console.log("-----Updated Doc-----");
+
+    if (updatedDoc.error == null) {
+      setName(updatedDoc.document.name);
+      setNameBelowTest(updatedDoc.document.nameBelowTest);
+      setOutsidelabId(updatedDoc.document.outsidelabId);
+      setSummary(updatedDoc.document.summary);
+      SetIsIndividualTest(updatedDoc.document.isIndividualTest);
+      setIsOutsideTest(updatedDoc.document.isOutsideTest);
+      setCost(updatedDoc.document.cost);
+      setMrp(updatedDoc.document.mrp);
+    }
+
+    setshowTinyMceTextBox(true);
+    setshowTinyMceTextBox(false);
+    setshowTinyMceTextBox(true);
+    createMarkup();
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const createMarkup = () => {
+    return { __html: summary };
   };
 
   const GetOutsideLabNameById = (id) => {
@@ -26,17 +85,16 @@ const [showEditSection,setShowEditSection] =useState(false);
             <div></div>
 
             <p className="normalText text-center border-solid border-b-2	 border-gray-300 ">
-              {props.subtest.name}
+              {name}
             </p>
 
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
-              
-              
               height="16"
-              onClick={()=>{setShowEditSection(!showEditSection)}}
-              
+              onClick={() => {
+                setShowEditSection(!showEditSection);
+              }}
               fill="currentColor"
               class="bi bi-pencil"
               viewBox="0 0 16 16"
@@ -48,29 +106,22 @@ const [showEditSection,setShowEditSection] =useState(false);
           <div className="lg:grid lg:grid-cols-3   grid grid-cols-1 gap-2 lg:gap-4">
             <p className="text-base	text-gray-600 font-bold	">
               Subtest Type-
-              {props.subtest.isIndividualTest
-                ? "Individual Test"
-                : "MultipleTest"}
+              {isIndividualTest ? "Individual Test" : "MultipleTest"}
             </p>
             <p className="text-base	text-gray-600 font-bold	">
-              Outside Test - {props.subtest.isOutsideTest ? "Yes" : "No"}
+              Outside Test - {isOutsideTest ? "Yes" : "No"}
             </p>
 
             {props.subtest.isOutsideTest ? (
               <p className="text-base	text-gray-600 font-bold	">
-                Outside Lab Name -
-                {GetOutsideLabNameById(props.subtest.outsidelabId)}
+                Outside Lab Name -{GetOutsideLabNameById(outsidelabId)}
               </p>
             ) : null}
 
+            <p className="text-base	text-gray-600 font-bold	">Cost :{cost} </p>
+            <p className="text-base	text-gray-600 font-bold	">Mrp: {mrp}</p>
             <p className="text-base	text-gray-600 font-bold	">
-              Cost :{props.subtest.cost}{" "}
-            </p>
-            <p className="text-base	text-gray-600 font-bold	">
-              Mrp: {props.subtest.mrp}
-            </p>
-            <p className="text-base	text-gray-600 font-bold	">
-              Name Below Test : {props.subtest.nameBelowTest}
+              Name Below Test : {nameBelowTest}
             </p>
           </div>
 
@@ -78,15 +129,21 @@ const [showEditSection,setShowEditSection] =useState(false);
             <p className="text-base	text-gray-600 font-bold	text-center ">
               Summary
             </p>
-            <p
-              dangerouslySetInnerHTML={createMarkup(props.subtest.summary)}
-              className="text-base	text-gray-600 font-bold	text-center "
-            ></p>
+            {showTinyMceTextBox ? (
+              <p
+                dangerouslySetInnerHTML={createMarkup()}
+                className="text-base	text-gray-600 font-bold	text-center "
+              ></p>
+            ) : null}
           </div>
         </div>
-      
-{showEditSection?<EditSubtestComponent  subtest={props.subtest} />:null}         
-      
+
+        {showEditSection ? (
+          <EditSubtestComponent
+            subtest={props.subtest}
+            reloadData={reloadData}
+          />
+        ) : null}
       </div>
     </div>
   );

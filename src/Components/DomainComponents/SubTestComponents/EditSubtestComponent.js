@@ -41,6 +41,10 @@ const EditSubtestComponent = (props) => {
   );
   const [editorElementEvent, setEditorElementEvent] = useState();
 
+
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
+
   const alert = useAlert();
 
   const loadOutLabList = async () => {
@@ -59,12 +63,16 @@ const EditSubtestComponent = (props) => {
   }, []);
 
   const update = async () => {
+    let localsummary=""
     if (typeof editorElementEvent != "undefined") {
       console.log(
         "Content was updated:",
         editorElementEvent.target.getContent()
       );
-      setSummary(editorElementEvent.target.getContent());
+      localsummary= editorElementEvent.target.getContent();
+     // setSummary(editorElementEvent.target.getContent());
+     // setSummary(a);
+    
     }
 
     const { UpdateSubTest } = SubtestFunctions();
@@ -80,10 +88,22 @@ const EditSubtestComponent = (props) => {
     subtestObj.note = note;
     subtestObj.outsidelabId = outsideLabId;
     subtestObj.show = show;
-    subtestObj.summary = summary;
-    await UpdateSubTest(grouptestId, subtestId, subtestObj);
+    subtestObj.summary = localsummary;
+    setIsSubmittingForm(true);
+let res=  await UpdateSubTest(grouptestId, subtestId, subtestObj);
+setIsSubmittingForm(false);
 
-    alert.show("Updated!");
+if(res==null){
+  alert.success("Updated!");
+
+  // console.log(props);
+props.reloadData();
+
+
+}
+else{
+  alert.error(res.error)
+}
   };
 
   const handleEditorChange = (e) => {
@@ -241,9 +261,13 @@ const EditSubtestComponent = (props) => {
           />
         </div>
 
-        <button type="submit" className="primaryButton mt-4 col-span-1">
+{isSubmittingForm?<button type="submit" disabled className="primaryDisabledButton mt-4 col-span-1">
+          Updating
+        </button>:<button type="submit" className="primaryButton mt-4 col-span-1">
           Update
-        </button>
+        </button>}
+
+        
       </form>
     </div>
   );

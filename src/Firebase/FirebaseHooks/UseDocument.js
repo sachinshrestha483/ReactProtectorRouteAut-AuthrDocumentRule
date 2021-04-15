@@ -21,12 +21,17 @@ const UseDocument = (collection, id) => {
     error = null;
 
     try {
-      const res = await docRef.update(updates);
-      return res;
+      await docRef.update(updates);
+      console.log("res is Here ");
+
+     
     } catch (err) {
       console.log(err.message);
-      error = "could Not  Update The Document";
+      error = err.message;
     }
+
+return {error}
+
   };
 
   return { error,  deleteDoc, updateDoc };

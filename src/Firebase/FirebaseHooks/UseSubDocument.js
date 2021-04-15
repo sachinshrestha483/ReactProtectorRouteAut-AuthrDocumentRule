@@ -27,8 +27,10 @@ const useSubDocument = (collectionPath, id) => {
       return res;
     } catch (err) {
       console.log(err.message);
-      error = "Could Not Update The Document";
+      error = err.message;
     }
+
+    return {error:error};
   };
 
   return { error,  deleteDoc, updateDoc };

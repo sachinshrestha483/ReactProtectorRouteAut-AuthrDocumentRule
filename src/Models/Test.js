@@ -4,8 +4,47 @@ import UseDocument from "../Firebase/FirebaseHooks/UseDocument";
 
 import getCollection from "../Firebase/FirebaseHooks/GetCollection";
 import { timestamp } from "./../Firebase/FirebaseUtils";
+import useSubCollectionByPath from "../Firebase/FirebaseHooks/UseSubCollectionByPath";
 
-const collectionName = "SubTest";
+import GetSubCollection from "../Firebase/FirebaseHooks/GetSubCollection"
+
+const collectionName = "Test";
+const subParentCollectionName = "SubTests";
+const parentCollectionName = "TestGroup";
+
+
+const TestFunctions = () => {
+ 
+  const AddTest=async(groupTestId,subtestId,obj)=>{
+    const collectionPath=parentCollectionName+"/"+groupTestId+"/"+subParentCollectionName+"/"+subtestId+"/"+collectionName;
+    const { addDoc } = useSubCollectionByPath(collectionPath);
+    obj.dateIndex = timestamp();
+    await addDoc(Object.assign({}, obj));
+  }
+
+    const GetAllTestList=  async()=> {
+     let list = await GetSubCollection(collectionName, null, null);
+     console.log("-----list------");
+     console.log("-----list------");
+     
+     console.log("-----list------");
+       console.log(list.documents);
+     console.log("-----list------");
+     console.log("-----list------");
+     console.log("-----list------");
+
+     
+     return list;
+   } 
+ 
+  return {
+    AddTest,
+    GetAllTestList
+  };
+}
+ 
+export  {TestFunctions};
+
 
 class Test {
   constructor() {
@@ -28,30 +67,31 @@ class Test {
     this.subtestId = "";
     this.dateIndex = "";
     this.show=true;
+    this.suggestedValues=[];
     
   }
 
-  async AddTest() {
-    const { addDoc } = useCollection(collectionName);
-    this.createdAt = timestamp;
-    await addDoc(Object.assign({}, this));
-  }
-  async UpdateTest(id) {
-    const { updateDoc } = UseDocument(collectionName, id);
+  // async AddTest() {
+  //   const { addDoc } = useCollection(collectionName);
+  //   this.createdAt = timestamp;
+  //   await addDoc(Object.assign({}, this));
+  // }
+  // async UpdateTest(id) {
+  //   const { updateDoc } = UseDocument(collectionName, id);
 
-    await updateDoc(Object.assign({}, this));
-  }
+  //   await updateDoc(Object.assign({}, this));
+  // }
 
-  async GetTestById(id) {
-    const { load } = GetDocument(collectionName, id);
-    let subTest = await load();
-    return subTest;
-  }
+  // async GetTestById(id) {
+  //   const { load } = GetDocument(collectionName, id);
+  //   let subTest = await load();
+  //   return subTest;
+  // }
 
-  async GetTestList() {
-    let subTestList = await getCollection(collectionName, null, ["dateIndex"]);
-    return subTestList;
-  }
+  // async GetTestList() {
+  //   let subTestList = await getCollection(collectionName, null, ["dateIndex"]);
+  //   return subTestList;
+  // }
 }
 
 export default Test;

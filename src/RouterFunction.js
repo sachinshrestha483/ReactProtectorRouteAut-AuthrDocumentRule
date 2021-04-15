@@ -11,6 +11,10 @@ import LabSettings from "./Pages/LabSettings";
 import GroupPage from "./Pages/DomainPages/GroupPage";
 import SubtestPage from "./Pages/DomainPages/SubTestPage";
 import ViewAndEditSubtestPage from "./Pages/DomainPages/ViewAndEditSubtestPage";
+import ViewAndEditTestPage from "./Pages/DomainPages/ViewAndEditTestPage";
+
+
+import TestPage from "./Pages/DomainPages/TestPage";
 
 
 const RouterFunction = () => {
@@ -68,10 +72,17 @@ else{
               <ViewAndEditSubtestPage />
             </Route>
 
+            <Route exact path="/TestListPage">
+              <ViewAndEditTestPage />
+            </Route>
+
             <PrivateRoute path="/PrivatePage" component={PrivatePage} redirect="/" validateFunction={isLoggedin()}  />
 
             <Route exact path="/SignUp">
               <SignUpPage />
+            </Route>
+            <Route exact path="/TestPage">
+              <TestPage />
             </Route>
             <Route exact path="/PublicPage">
               <PublicPage />

@@ -2,6 +2,7 @@ import GetDocument from "../Firebase/FirebaseHooks/GetDocument";
 import useCollection from "../Firebase/FirebaseHooks/UseCollection";
 import UseDocument from "../Firebase/FirebaseHooks/UseDocument";
 import useSubCollection from "../Firebase/FirebaseHooks/UseSubCollecction";
+import GetSubDocument from "../Firebase/FirebaseHooks/GetSubDocument";
 
 import GetCollection from "../Firebase/FirebaseHooks/GetCollection";
 import { timestamp } from "./../Firebase/FirebaseUtils";
@@ -19,9 +20,21 @@ export const SubtestFunctions = () => {
       id,
       collectionName
     );
-    await addDoc(Object.assign({}, doc));
+    let res = await addDoc(Object.assign({}, doc));
+    console.log(res);
+    return res;
   };
 
+  const GetSubtestById = async (parentDocumnentId, childDocumentId) => {
+    let collectionPath =
+      ParentCollectionName + "/" + parentDocumnentId + "/" + collectionName;
+
+    const { load } = GetSubDocument();
+
+    let res = await load(collectionPath, childDocumentId);
+
+    return res;
+  };
 
   const GetSubtestList = async () => {
     let list = await GetCollection(collectionName, null, ["dateIndex"]);
@@ -31,30 +44,37 @@ export const SubtestFunctions = () => {
     return list;
   };
 
+  const UpdateSubTest = async (parentDocumnentId, childDocumentId, obj) => {
+    let collectionPath =
+      ParentCollectionName + "/" + parentDocumnentId + "/" + collectionName;
+    const { deleteDoc, updateDoc } = useSubDocument(
+      collectionPath,
+      childDocumentId
+    );
 
+    let res = await updateDoc(Object.assign({}, obj));
 
-  const  UpdateSubTest=async (parentDocumnentId,childDocumentId,obj)=> {
-     let  collectionPath=  ParentCollectionName+ "/" + parentDocumnentId + "/"+collectionName;
-         const { deleteDoc,updateDoc } = useSubDocument(collectionPath, childDocumentId);
-    
-         await updateDoc(Object.assign({}, obj));
-      }
+    return res;
+  };
 
+  const GetAllSubTest = async () => {
+    const { error, documents } = await getSubCollection(collectionName);
 
-  const GetAllSubTest=async()=>{
- 
- const { error, documents}=await  getSubCollection(collectionName);
-
- if(error!=null){
-     console.log("Error in Loading The List")
- }
+    if (error != null) {
+      console.log("Error in Loading The List");
+    }
     let list = documents;
 
     return list;
-  }
+  };
 
-
-  return { AddSubTest, GetSubtestList ,GetAllSubTest,UpdateSubTest};
+  return {
+    AddSubTest,
+    GetSubtestList,
+    GetAllSubTest,
+    UpdateSubTest,
+    GetSubtestById,
+  };
 };
 
 class SubTest {

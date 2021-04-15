@@ -7,12 +7,21 @@ const collectionName = "TestGroup";
 
 export const TestGroupFunctions = () => {
   const AddGroupTest = async (obj) => {
-    const { addDoc } = useCollection(collectionName);
-   // obj.dateIndex= timestamp();
+    const { addDoc} = useCollection(collectionName);
+   obj.dateIndex= timestamp();
+
     console.log("TimeStamp")
     console.log(timestamp());
-    await addDoc(Object.assign({}, obj));
-  };
+  let res=   await addDoc(Object.assign({}, obj));
+  
+console.log("---------Error is Here----------")
+console.log(res);
+console.log("---------Error is Here----------")
+
+console.log("---------Error is Here----------")
+
+return res;
+};
 
   const GetTestGroupList = async () => {
     let groupList = await GetCollection(collectionName,null,["dateIndex"]);
@@ -22,7 +31,12 @@ export const TestGroupFunctions = () => {
       const  UpdateTest=async(id,obj)=> {
       const { updateDoc } =await  UseDocument(collectionName, id);
 
-      await updateDoc(Object.assign({}, obj));
+    
+    
+    let res=   await updateDoc(Object.assign({}, obj));
+    
+    return res;
+    
     }
 
     
