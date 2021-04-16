@@ -20,20 +20,15 @@ const getSubCollection = async (
     collectionRef = collectionRef.orderBy(...orderBy);
   }
 
-  let res = await collectionRef.get();
-
   try {
+    let res = await collectionRef.get();
+
     documents = await res.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
     console.log(documents);
   } catch (err) {
-
-console.log("-------@@@Error@@@----")
     console.log(err.message);
-    console.log(err.message);
-
-
 
     error = err.message;
   }

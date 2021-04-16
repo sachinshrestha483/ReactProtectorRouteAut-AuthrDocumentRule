@@ -5,6 +5,8 @@ import getCollection from "../Firebase/FirebaseHooks/GetCollection";
 import { timestamp } from "./../Firebase/FirebaseUtils";
 import useSubCollectionByPath from "../Firebase/FirebaseHooks/UseSubCollectionByPath";
 import GetSubCollection from "../Firebase/FirebaseHooks/GetSubCollection";
+import useSubDocument from "../Firebase/FirebaseHooks/UseSubDocument";
+import GetSubDocument from "../Firebase/FirebaseHooks/GetSubDocument";
 
 const collectionName = "Test";
 const subParentCollectionName = "SubTests";
@@ -27,10 +29,45 @@ const TestFunctions = () => {
     await addDoc(Object.assign({}, obj));
   };
 
+  const GetTestById = async (groupTestId, subtestId, id) => {
+    const collectionPath =
+      parentCollectionName +
+      "/" +
+      groupTestId +
+      "/" +
+      subParentCollectionName +
+      "/" +
+      subtestId +
+      "/" +
+      collectionName;
+
+    const { load } = GetSubDocument();
+
+    let doc = await load(collectionPath, id);
+
+    return doc;
+  };
+
+  const UpdateTest = async (groupTestId, subtestId, id, doc) => {
+    const collectionPath =
+      parentCollectionName +
+      "/" +
+      groupTestId +
+      "/" +
+      subParentCollectionName +
+      "/" +
+      subtestId +
+      "/" +
+      collectionName;
+
+    const { updateDoc } = useSubDocument(collectionPath, id);
+
+    await updateDoc(Object.assign({}, doc));
+  };
+
   const GetAllTestList = async () => {
-    console.log("----------------------------get all Test -------------------")
-   
-   
+    console.log("----------------------------get all Test -------------------");
+
     let list = await GetSubCollection(collectionName, null, null);
     console.log("-----list------");
     console.log("-----list------");
@@ -46,6 +83,8 @@ const TestFunctions = () => {
   return {
     AddTest,
     GetAllTestList,
+    GetTestById,
+    UpdateTest,
   };
 };
 

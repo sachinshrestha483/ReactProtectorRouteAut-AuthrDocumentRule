@@ -9,20 +9,20 @@ const AddTestComponent = () => {
   const [subTestList, setSubtestList] = useState([]);
   const [groupTestList, setGroupList] = useState([]);
   const [name, setName] = useState("");
-  const [unit, setUnit] = useState("");
-  const [normalRangeText, setNormalRangeText] = useState("");
-  const [infantNormalRangeMax, setInfantNormalRangeMax] = useState("");
-  const [infantNormalRangeMin, setInfantNormalRangeMin] = useState("");
-  const [maleNormalRangeMax, setMaleNormalRangeMax] = useState("");
-  const [maleNormalRangeMin, setMaleNormalRangeMin] = useState("");
-  const [femaleNormalRangeMax, setFemaleNormalRangeMax] = useState("");
-  const [femaleNormalRangeMin, setFemaleNormalRangeMin] = useState("");
-  const [centerText, setCenterText] = useState("");
-  const [leftText, setLeftText] = useState("");
-  const [belowText, setBelowText] = useState("");
-  const [summary, setSummary] = useState("");
+  const [unit, setUnit] = useState(null);
+  const [normalRangeText, setNormalRangeText] = useState(null);
+  const [infantNormalRangeMax, setInfantNormalRangeMax] = useState(null);
+  const [infantNormalRangeMin, setInfantNormalRangeMin] = useState(null);
+  const [maleNormalRangeMax, setMaleNormalRangeMax] = useState(null);
+  const [maleNormalRangeMin, setMaleNormalRangeMin] = useState(null);
+  const [femaleNormalRangeMax, setFemaleNormalRangeMax] = useState(null);
+  const [femaleNormalRangeMin, setFemaleNormalRangeMin] = useState(null);
+  const [centerText, setCenterText] = useState(null);
+  const [leftText, setLeftText] = useState(null);
+  const [belowText, setBelowText] = useState(null);
+  const [summary, setSummary] = useState(null);
   const [groupId, setGroupId] = useState("");
-  const [show, setShow] = useState("");
+  const [show, setShow] = useState(false);
 
   const [subtestId, setSubtestId] = useState(0);
 
@@ -35,10 +35,9 @@ const AddTestComponent = () => {
 
     let subtestObject = subTestList.find((item) => item.id == subtestId);
 
-
-    console.log("-------subtest object----------")
- console.log(subtestObject)
- console.log("-------subtest object----------")
+    console.log("-------subtest object----------");
+    console.log(subtestObject);
+    console.log("-------subtest object----------");
 
     if (subtestObject == null) {
       console.log("-----function return-----");
@@ -171,10 +170,7 @@ const AddTestComponent = () => {
               required
               className="inputBox  py-0"
               value={subtestId}
-              onChange={(e) => setSubtestId(e.target.value)
-              
-              
-              }
+              onChange={(e) => setSubtestId(e.target.value)}
             >
               <option value="">Select The Subtest Test</option>
               {subTestList.map((item) => {

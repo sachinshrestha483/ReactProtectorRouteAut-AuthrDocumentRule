@@ -125,6 +125,18 @@ const IndividualSubTest = (props) => {
             </p>
           </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
           <div className="flex flex-col">
             <p className="text-base	text-gray-600 font-bold	text-center ">
               Summary
@@ -136,6 +148,10 @@ const IndividualSubTest = (props) => {
               ></p>
             ) : null}
           </div>
+
+
+
+          
         </div>
 
         {showEditSection ? (
