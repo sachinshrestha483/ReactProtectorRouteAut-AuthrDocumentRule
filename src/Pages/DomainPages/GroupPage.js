@@ -12,8 +12,8 @@ const GroupPage = () => {
   const loadData = async () => {
     const data = await GetTestGroupList();
     console.log(data);
-    console.log(data.documents);
-    setGroupTestList(data.documents);
+    console.log(data);
+    setGroupTestList(data);
   };
 
   useEffect(() => {

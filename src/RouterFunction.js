@@ -18,7 +18,7 @@ import TestPage from "./Pages/DomainPages/TestPage";
 
 
 const RouterFunction = () => {
-  const {user}= GetUser();
+  const {user}= GetUser();/// here is  where we set the state of user 
 
 const isAdmin=()=>{
 return true;

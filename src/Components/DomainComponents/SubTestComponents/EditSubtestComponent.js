@@ -55,7 +55,7 @@ const EditSubtestComponent = (props) => {
     let list = await GetOutLabList();
 
     console.log(list);
-    setOutsideLabList(list.documents);
+    setOutsideLabList(list);
   };
 
   useEffect(() => {
@@ -93,7 +93,11 @@ const EditSubtestComponent = (props) => {
 let res=  await UpdateSubTest(grouptestId, subtestId, subtestObj);
 setIsSubmittingForm(false);
 
-if(res==null){
+
+console.log("---res----")
+console.log(res);
+
+if(res.error==null){
   alert.success("Updated!");
 
   // console.log(props);
@@ -201,7 +205,7 @@ else{
                 onChange={(e) => setOutsidelabId(e.target.value)}
               >
                 {OutsideLabList.map((item) => {
-                  return <option value={item.id}>{item.name}</option>;
+                  return <option key={item.id} value={item.id}>{item.name}</option>;
                 })}
               </select>
             </div>

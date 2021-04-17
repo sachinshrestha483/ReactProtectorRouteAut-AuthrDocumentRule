@@ -23,7 +23,7 @@ const ViewAndEditSubtestPage = () => {
   const loadGroupTest = async () => {
     const { GetTestGroupList } = TestGroupFunctions();
     let list = await GetTestGroupList();
-    setGroupTestList(list.documents);
+    setGroupTestList(list);
   };
 
   const loadAllSubtests = async () => {
@@ -41,7 +41,7 @@ const ViewAndEditSubtestPage = () => {
 
     let list = await GetOutLabList();
 
-    setOutLabList(list.documents);
+    setOutLabList(list);
     console.log("----Outlab List----");
     console.log(outLabList);
   };
@@ -84,7 +84,7 @@ const ViewAndEditSubtestPage = () => {
         >
           <option>Select The Group Test</option>
           {groupTestList.map((item) => {
-            return <option value={item.id}>{item.name}</option>;
+            return <option key={item.id} value={item.id}>{item.name}</option>;
           })}
         </select>
 

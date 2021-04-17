@@ -9,6 +9,9 @@ import { timestamp } from "./../Firebase/FirebaseUtils";
 import getSubCollection from "../Firebase/FirebaseHooks/GetSubCollection";
 import useSubDocument from "../Firebase/FirebaseHooks/UseSubDocument";
 
+import { setSubTests } from "../Store/Domain/Subtest/reducer";
+import store from "../Store/Configurestore";
+
 const ParentCollectionName = "TestGroup";
 const collectionName = "SubTests";
 
@@ -36,13 +39,13 @@ export const SubtestFunctions = () => {
     return res;
   };
 
-  const GetSubtestList = async () => {
-    let list = await GetCollection(collectionName, null, ["dateIndex"]);
-    console.log("List is Here");
-    console.log(list);
+  // const GetSubtestList = async () => {
+  //   let list = await GetCollection(collectionName, null, ["dateIndex"]);
+  //   console.log("List is Here");
+  //   console.log(list);
 
-    return list;
-  };
+  //   return list;
+  // };
 
   const UpdateSubTest = async (parentDocumnentId, childDocumentId, obj) => {
     let collectionPath =
@@ -58,19 +61,34 @@ export const SubtestFunctions = () => {
   };
 
   const GetAllSubTest = async () => {
+    // const { error, documents } = await getSubCollection(collectionName);
+
+    // if (error != null) {
+    //   console.log("Error in Loading The List");
+    // }
+    // let list = documents;
+
+    // store.getState();
+
+    if (store.getState().domainReducer.subTest.isLoaded == false) {
+      setSubTestinStore();
+    }
+
+    return store.getState().domainReducer.subTest.subTests;
+  };
+
+  const setSubTestinStore = async () => {
     const { error, documents } = await getSubCollection(collectionName);
 
     if (error != null) {
-      console.log("Error in Loading The List");
+      store.dispatch(setSubTests({ isLoaded: true, subTests: [] }));
+    } else {
+      store.dispatch(setSubTests({ isLoaded: true, subTests: documents }));
     }
-    let list = documents;
-
-    return list;
   };
 
   return {
     AddSubTest,
-    GetSubtestList,
     GetAllSubTest,
     UpdateSubTest,
     GetSubtestById,

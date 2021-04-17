@@ -24,7 +24,7 @@ const useSubDocument = (collectionPath, id) => {
 
     try {
       const res = await docref.update(updates);
-      return res;
+     // return res;
     } catch (err) {
       console.log(err.message);
       error = err.message;

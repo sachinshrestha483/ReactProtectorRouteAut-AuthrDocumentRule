@@ -193,7 +193,9 @@ const IndividualTestComponent = (props) => {
             <div>
               {suggestedValues.map((item) => {
                 return (
-                  <p className="text-base	text-gray-600 font-bold	text-center">
+                  <p 
+                  key={item.id}
+                  className="text-base	text-gray-600 font-bold	text-center">
                     {item.name}
                   </p>
                 );

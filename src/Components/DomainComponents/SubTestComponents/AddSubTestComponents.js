@@ -35,7 +35,7 @@ const AddSubtestComponent = () => {
     let list = await GetOutLabList();
 
     console.log(list);
-    setOutsideLabList(list.documents);
+    setOutsideLabList(list);
   };
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const AddSubtestComponent = () => {
     const { GetTestGroupList } = TestGroupFunctions();
 
     let list = await GetTestGroupList();
-    setTestGroupList(list.documents);
+    setTestGroupList(list);
   };
 
   const handleEditorChange = (e) => {
@@ -128,7 +128,7 @@ const AddSubtestComponent = () => {
             >
               <option  value="">Select The Group Test</option>
               {groupTestList.map((item) => {
-                return <option value={item.id}>{item.name}</option>;
+                return <option key={item.id} value={item.id}>{item.name}</option>;
               })}
             </select>
           </div>
@@ -212,7 +212,7 @@ const AddSubtestComponent = () => {
                 onChange={(e) => setOutsidelabId(e.target.value)}
               >
                 {OutsideLabList.map((item) => {
-                  return <option value={item.id}>{item.name}</option>;
+                  return <option key={item.id} value={item.id}>{item.name}</option>;
                 })}
               </select>
             </div>

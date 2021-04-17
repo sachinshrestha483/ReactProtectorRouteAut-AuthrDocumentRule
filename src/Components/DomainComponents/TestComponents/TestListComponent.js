@@ -6,7 +6,9 @@ const TestlistComponent = (props) => {
   return (
     <div>
       {props.filteredTestList.map((item) => {
-        return <IndividualTestComponent    test={item}  />;
+        return <IndividualTestComponent  
+        key={item.id}
+        test={item}  />;
       })}
     </div>
   );

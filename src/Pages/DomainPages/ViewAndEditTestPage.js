@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Subtest from "./../../Models/Subtest";
 import { SubtestFunctions } from "./../../Models/Subtest";
 import { TestGroupFunctions } from "./../../Models/TestGroup";
-import { OutlabFunctions } from "./../../Models/Outlabs";
+// import { OutlabFunctions } from "./../../Models/Outlabs";
 import SubtestList from "../../Components/DomainComponents/SubTestComponents/SubtestList";
 import { TestFunctions } from "./../../Models/Test";
 import TestlistComponent from "../../Components/DomainComponents/TestComponents/TestListComponent";
@@ -30,8 +30,10 @@ const ViewAndEditTestPage = () => {
     console.log("-----------------------list---", list);
     console.log(list);
 
-    setTestList(list.documents);
+    setTestList(list);
   };
+
+
 
   const loadAllSubtests = async () => {
     const { GetAllSubTest } = SubtestFunctions();
@@ -78,7 +80,7 @@ const ViewAndEditTestPage = () => {
     let list = await GetTestGroupList();
     console.log("----List-----")
     console.log(list)
-    setGroupTestList(list.documents);
+    setGroupTestList(list);
   };
 
 
@@ -99,7 +101,9 @@ const ViewAndEditTestPage = () => {
         >
           <option>Select The Group Test</option>
           {subTestList.map((item) => {
-            return <option value={item.id}>{item.name} ({(getGroupTestNameById(item.groupTestId))})</option>;
+            return <option 
+            key={item.id}
+            value={item.id}>{item.name} ({(getGroupTestNameById(item.groupTestId))})</option>;
           })}
         </select>
 

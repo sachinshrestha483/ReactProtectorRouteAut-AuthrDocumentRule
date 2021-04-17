@@ -7,6 +7,8 @@ import useSubCollectionByPath from "../Firebase/FirebaseHooks/UseSubCollectionBy
 import GetSubCollection from "../Firebase/FirebaseHooks/GetSubCollection";
 import useSubDocument from "../Firebase/FirebaseHooks/UseSubDocument";
 import GetSubDocument from "../Firebase/FirebaseHooks/GetSubDocument";
+import store from "../Store/Configurestore";
+import { setTests } from "../Store/Domain/Test/reducer";
 
 const collectionName = "Test";
 const subParentCollectionName = "SubTests";
@@ -26,7 +28,9 @@ const TestFunctions = () => {
       collectionName;
     const { addDoc } = useSubCollectionByPath(collectionPath);
     obj.dateIndex = timestamp();
-    await addDoc(Object.assign({}, obj));
+    let res = await addDoc(Object.assign({}, obj));
+    console.log(res);
+    return res;
   };
 
   const GetTestById = async (groupTestId, subtestId, id) => {
@@ -62,22 +66,40 @@ const TestFunctions = () => {
 
     const { updateDoc } = useSubDocument(collectionPath, id);
 
-    await updateDoc(Object.assign({}, doc));
+    let res = await updateDoc(Object.assign({}, doc));
+
+    console.log("----res-----");
+    console.log(res);
+    console.log("----res-----");
+
+    return res;
   };
 
   const GetAllTestList = async () => {
     console.log("----------------------------get all Test -------------------");
 
-    let list = await GetSubCollection(collectionName, null, null);
-    console.log("-----list------");
-    console.log("-----list------");
-    console.log("-----list------");
-    console.log(list.documents);
-    console.log("-----list------");
-    console.log("-----list------");
-    console.log("-----list------");
+    // let list = await GetSubCollection(collectionName, null, null);
 
-    return list;
+    // console.log(list.documents);
+
+    if(store.getState().domainReducer.test.isLoaded==false){
+      await seTestinStore();
+
+    }
+
+    console.log(store.getState());
+
+    return store.getState().domainReducer.test.tests;
+  };
+
+  const seTestinStore = async () => {
+    let list = await GetSubCollection(collectionName, null, null);
+
+    if (list.error != null) {
+      store.dispatch(setTests({ isLoaded: true, tests: [] }));
+    } else {
+      store.dispatch(setTests({ isLoaded: true, tests: list.documents }));
+    }
   };
 
   return {

@@ -4,6 +4,7 @@ import { TestGroupFunctions } from "../../../Models/TestGroup";
 import { Editor } from "@tinymce/tinymce-react";
 import Test from "../../../Models/Test";
 import { TestFunctions } from "../../../Models/Test";
+import { useAlert } from "react-alert";
 
 
 
@@ -32,6 +33,15 @@ const EditTestComponent = (props) => {
 
 
   const [editorElementEvent, setEditorElementEvent] = useState();
+
+
+
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
+
+
+  const alert = useAlert();
+
 
 
   const UpdateTestfunction = async () => {
@@ -92,7 +102,21 @@ const EditTestComponent = (props) => {
 
     console.log("---------------------subtest Id-------------");
 
-    await UpdateTest(props.test.groupId, props.test.subtestId, id, testObject);
+
+
+    setIsSubmittingForm(true);
+
+    let res= await UpdateTest(props.test.groupId, props.test.subtestId, id, testObject);
+    setIsSubmittingForm(false);
+
+    console.log(res);
+
+     if (res.error == null) {
+       alert.success("Test Updated!");
+
+     } else {
+      alert.error("Error Occured " + res.error);
+     }
 
      
     props.reloadData();
@@ -336,7 +360,9 @@ const EditTestComponent = (props) => {
 
               {suggestedValues.map((item, index) => {
                 return (
-                  <div className="flex flex-row items-center">
+                  <div
+                  key={item.id}
+                  className="flex flex-row items-center">
                     <input
                       className="inputBox "
                       placeholder="Suggested Values  "
@@ -403,9 +429,18 @@ const EditTestComponent = (props) => {
             <label class="ml-2  py-0 normalText">Show </label>
           </div>
         </div>
+
+
+        {isSubmittingForm?<button  disabled className="primaryDisabledButton mt-4 col-span-1">
+          Updating Test
+        </button>:
         <button type="submit" className="primaryButton mt-4 col-span-1">
-          Update Test
-        </button>
+        Update Test 
+      </button>}
+        
+
+
+       
       </form>
     </div>
   );

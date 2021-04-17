@@ -4,6 +4,7 @@ import { TestGroupFunctions } from "../../../Models/TestGroup";
 import { Editor } from "@tinymce/tinymce-react";
 import Test from "../../../Models/Test";
 import { TestFunctions } from "../../../Models/Test";
+import { useAlert } from "react-alert";
 
 const AddTestComponent = () => {
   const [subTestList, setSubtestList] = useState([]);
@@ -28,23 +29,29 @@ const AddTestComponent = () => {
 
   const [suggestedValues, setSuggestedValues] = useState([{ name: "sdd" }]);
 
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
+  const alert = useAlert();
+
   const AddTestfunction = async () => {
     const { AddTest } = TestFunctions();
 
     const testObject = new Test();
 
-    let subtestObject = subTestList.find((item) => item.id == subtestId);
+    let subtestObject =await  subTestList.find((item) => item.id == subtestId);
 
     console.log("-------subtest object----------");
     console.log(subtestObject);
-    console.log("-------subtest object----------");
+    console.log("-------subtest object Group Id----------");
+
+    let grpId= subtestObject.groupTestId;
 
     if (subtestObject == null) {
       console.log("-----function return-----");
       return;
     }
 
-    setGroupId(subtestObject.groupTestId);
+    setGroupId(grpId);
 
     console.log("---------Added in Group----------");
 
@@ -62,7 +69,7 @@ const AddTestComponent = () => {
     testObject.centerText = centerText;
     testObject.femaleNormalRangeMax = femaleNormalRangeMax;
     testObject.femaleNormalRangeMin = femaleNormalRangeMin;
-    testObject.groupId = groupId;
+    testObject.groupId = grpId;
     testObject.infantNormalRangeMax = infantNormalRangeMax;
     testObject.infantNormalRangeMin = infantNormalRangeMin;
     testObject.leftText = leftText;
@@ -75,14 +82,28 @@ const AddTestComponent = () => {
     testObject.suggestedValues = suggestedValues;
     testObject.summary = summary;
     testObject.unit = unit;
+    setIsSubmittingForm(true);
 
-    await AddTest(groupId, subtestId, testObject);
+    let res = await AddTest(grpId, subtestId, testObject);
+
+    console.log("---res---");
+    console.log(res);
+
+    setIsSubmittingForm(false);
+
+     if (res.error == null) {
+       alert.success("Test Added!");
+        setName("");
+
+     } else {
+      alert.error("Error Occured " + res.error);
+     }
   };
 
   const loadGroupTests = async () => {
     const { GetTestGroupList } = TestGroupFunctions();
     let list = await GetTestGroupList();
-    setGroupList(list.documents);
+    setGroupList(list);
   };
 
   const loadSubtests = async () => {
@@ -175,7 +196,9 @@ const AddTestComponent = () => {
               <option value="">Select The Subtest Test</option>
               {subTestList.map((item) => {
                 return (
-                  <option value={item.id}>
+                  <option 
+                  key={item.id}
+                  value={item.id}>
                     {item.name}({getGroupTestNameById(item.groupTestId)})
                   </option>
                 );
@@ -354,7 +377,10 @@ const AddTestComponent = () => {
 
               {suggestedValues.map((item, index) => {
                 return (
-                  <div className="flex flex-row items-center">
+                  <div 
+                  
+                  key={item.id}
+                  className="flex flex-row items-center">
                     <input
                       className="inputBox "
                       placeholder="Suggested Values  "
@@ -421,9 +447,20 @@ const AddTestComponent = () => {
             <label class="ml-2  py-0 normalText">Outside Test </label>
           </div>
         </div>
+       
+        {isSubmittingForm?<button type="submit" disabled className="primaryDisabledButton mt-4 col-span-1">
+          Adding Test
+        </button>:
         <button type="submit" className="primaryButton mt-4 col-span-1">
+        Add Test
+      </button>}
+        
+
+       
+       
+        {/* <button type="submit" className="primaryButton mt-4 col-span-1">
           Add Test
-        </button>
+        </button> */}
       </form>
     </div>
   );
